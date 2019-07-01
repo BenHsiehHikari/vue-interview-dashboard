@@ -1,0 +1,49 @@
+towns1() {
+      return this.result1.filter(item => item.locationName === this.selectedTown);
+    },
+    currentTown1() {
+        return this.towns1[0];
+    },
+    towns2() {
+      return this.result2.filter(item => item.locationName === (this.selectedTown || "桃園區"));
+    },
+    currentTown2() {
+        return this.towns2[0];
+    }
+
+    fetchYilan(){
+      axios
+        .get(
+          'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-001?Authorization=CWB-ECC77BA1-CA46-4ECC-B680-18F3C5184C7B'
+        )
+        .then(response => {
+            this.result1 = response.data.records.locations[0].location;
+        })
+        .catch(error => {
+          console.log(error)
+          this.errored = true
+        })
+        .finally(() => this.loading = false)
+    },
+    fetchTaoyuan(){
+      axios
+        .get(
+          'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-005?Authorization=CWB-ECC77BA1-CA46-4ECC-B680-18F3C5184C7B'
+        )
+        .then(response => {
+            this.result2 = response.data.records.locations[0].location;
+        })
+        .catch(error => {
+          console.log(error)
+          this.errored = true
+        })
+        .finally(() => this.loading = false)
+    },
+    handleSelectCity(e){
+      this.selectedCity = e.target.value;
+      console.log(this.selectedCity);
+    },
+    handleSelectTown(e){
+      this.selectedTown = e.target.value;
+      console.log(this.selectedTown);
+    }
